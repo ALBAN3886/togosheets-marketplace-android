@@ -16,7 +16,7 @@ jobs:
           gradle-version: '8.5'
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > aet-release.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n' | base64 -d > aet-release.jks
       - name: Build signed APK
         run: |
           gradle assembleRelease \
