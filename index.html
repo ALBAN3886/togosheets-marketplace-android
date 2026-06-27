@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TogoSheets Pro — Marketplace</title>
+<meta name="description" content="Découvrez toutes les boutiques en ligne propulsées par AET Technology">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --primary:#10b981;--primary-d:#059669;--primary-rgb:16,185,129;
+  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;
+  --muted:#64748b;--radius:16px;--shadow:0 2px 12px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── Header ── */
+.header{background:linear-gradient(135deg,#059669,#10b981 50%,#34d399);padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(16,185,129,.3)}
+.header-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:12px;height:56px}
+.header-logo{width:36px;height:36px;background:#fff;border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:13px;color:var(--primary);flex-shrink:0}
+.header-title{color:#fff;font-weight:800;font-size:17px;flex:1}
+.header-sub{color:rgba(255,255,255,.8);font-size:11px}
+.header-btn{background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.header-btn:hover{background:rgba(255,255,255,.3)}
+
+/* ── Hero ── */
+.hero{background:linear-gradient(135deg,#ecfdf5,#f0fdf4);padding:24px 16px 16px;text-align:center;border-bottom:1px solid var(--border)}
+.hero h1{font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px}
+.hero p{color:var(--muted);font-size:13px;margin-bottom:16px}
+.hero-stats{display:flex;justify-content:center;gap:24px}
+.hero-stat{text-align:center}
+.hero-stat-n{font-size:22px;font-weight:900;color:var(--primary)}
+.hero-stat-l{font-size:11px;color:var(--muted)}
+
+/* ── Search & Filters ── */
+.search-wrap{max-width:700px;margin:16px auto;padding:0 16px}
+.search-box{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow)}
+.search-box i{color:var(--muted)}
+.search-box input{border:none;outline:none;flex:1;font-size:14px;background:transparent;color:var(--text)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:8px 0;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter-chip{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ── Sort bar ── */
+.sort-bar{max-width:700px;margin:0 auto;padding:0 16px 8px;display:flex;align-items:center;justify-content:space-between}
+.sort-bar span{font-size:13px;color:var(--muted)}
+.sort-select{border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;background:var(--card);color:var(--text);cursor:pointer}
+
+/* ── Grid boutiques ── */
+.grid{max-width:700px;margin:0 auto;padding:0 16px 100px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(min-width:480px){.grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ── Carte boutique ── */
+.shop-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.shop-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:var(--primary)}
+.shop-banner{height:90px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:grid;place-items:center;position:relative;overflow:hidden}
+.shop-banner img{width:100%;height:100%;object-fit:cover}
+.shop-banner-icon{font-size:36px}
+.shop-badge-new{position:absolute;top:8px;right:8px;background:#f59e0b;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+.shop-badge-top{position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+.shop-logo{width:44px;height:44px;border-radius:12px;border:3px solid var(--card);background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;position:absolute;bottom:-18px;left:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.shop-logo img{width:100%;height:100%;object-fit:cover}
+.shop-body{padding:24px 12px 12px}
+.shop-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-type{font-size:11px;color:var(--primary);font-weight:600;margin-bottom:4px}
+.shop-location{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.shop-stats{display:flex;gap:8px;font-size:11px;color:var(--muted)}
+.shop-stat{display:flex;align-items:center;gap:3px}
+.shop-stat i{font-size:10px;color:var(--primary)}
+.shop-btn{width:100%;margin-top:10px;padding:8px;background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer}
+
+/* ── Empty / Loading ── */
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--muted)}
+.empty i{font-size:48px;margin-bottom:12px;display:block;opacity:.3}
+.loader{display:flex;justify-content:center;align-items:center;height:200px;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--primary);animation:bounce .8s infinite alternate}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{to{transform:translateY(-14px);opacity:.5}}
+
+/* ── Footer ── */
+.footer{background:var(--card);border-top:1px solid var(--border);padding:16px;text-align:center;font-size:12px;color:var(--muted)}
+.footer a{color:var(--primary);text-decoration:none;font-weight:600}
+
+/* ── Modal boutique detail ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
+.overlay.open{display:flex}
+.drawer{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px}
+.drawer-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.drawer-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.drawer-logo{width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px;flex-shrink:0}
+.drawer-logo img{width:100%;height:100%;object-fit:cover}
+.drawer-name{font-size:18px;font-weight:900}
+.drawer-type{font-size:12px;color:var(--primary);font-weight:600}
+.drawer-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.drawer-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.meta-item{background:var(--bg);border-radius:10px;padding:10px}
+.meta-label{font-size:10px;color:var(--muted);margin-bottom:2px}
+.meta-val{font-size:13px;font-weight:700}
+.drawer-products{margin-bottom:16px}
+.drawer-products h4{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.mini-products{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini-product{background:var(--bg);border-radius:10px;overflow:hidden;text-align:center}
+.mini-product-img{height:60px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:grid;place-items:center;font-size:24px}
+.mini-product-img img{width:100%;height:100%;object-fit:cover}
+.mini-product-name{font-size:10px;font-weight:600;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-product-price{font-size:10px;color:var(--primary);font-weight:700;padding:0 6px 4px}
+.btn-visit{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;margin-top:4px}
+.btn-close{position:absolute;top:16px;right:16px;background:var(--bg);border:none;border-radius:50%;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">AET</div>
+    <div style="flex:1">
+      <div class="header-title">Marketplace TogoSheets</div>
+      <div class="header-sub">Toutes les boutiques en ligne</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🛍️ Boutiques en ligne</h1>
+  <p>Découvrez et achetez chez les vendeurs de confiance</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-n" id="statShops">—</div>
+      <div class="hero-stat-l">Boutiques</div>
+    </div>
+    <div class="hero-stat" style="display:none">
+      <div class="hero-stat-n" id="statProducts">—</div>
+      <div class="hero-stat-l">Produits</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n" id="statCities">—</div>
+      <div class="hero-stat-l">Villes</div>
+    </div>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-wrap">
+  <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Chercher une boutique, produit, ville…" oninput="applyFilters()">
+    <i class="fas fa-times" style="cursor:pointer;color:var(--muted)" onclick="clearSearch()"></i>
+  </div>
+  <div class="filters" id="filtersBar">
+    <div class="filter-chip active" data-cat="all" onclick="pickCat(this)">Tout</div>
+    <div class="filter-chip" data-cat="alimentaire" onclick="pickCat(this)">🍞 Alimentation</div>
+    <div class="filter-chip" data-cat="electronique" onclick="pickCat(this)">📱 Électronique</div>
+    <div class="filter-chip" data-cat="vetement" onclick="pickCat(this)">👗 Vêtements</div>
+    <div class="filter-chip" data-cat="beaute" onclick="pickCat(this)">💄 Beauté</div>
+    <div class="filter-chip" data-cat="maison" onclick="pickCat(this)">🏠 Maison</div>
+    <div class="filter-chip" data-cat="sante" onclick="pickCat(this)">💊 Santé</div>
+    <div class="filter-chip" data-cat="service" onclick="pickCat(this)">🔧 Services</div>
+    <div class="filter-chip" data-cat="autre" onclick="pickCat(this)">📦 Autres</div>
+  </div>
+</div>
+
+<!-- Sort bar -->
+<div class="sort-bar">
+  <span id="resultCount">Chargement…</span>
+  <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+    <option value="recent">Plus récentes</option>
+    <option value="products">Plus de produits</option>
+    <option value="alpha">A → Z</option>
+  </select>
+</div>
+
+<!-- Grid -->
+<div class="grid" id="shopsGrid">
+  <div class="loader" style="grid-column:1/-1">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</div>
+
+<!-- Drawer détail boutique -->
+<div class="overlay" id="shopOverlay" onclick="closeDrawer(event)">
+  <div class="drawer" id="shopDrawer">
+    <div class="drawer-handle"></div>
+    <button class="btn-close" onclick="closeShopDrawer()"><i class="fas fa-times"></i></button>
+    <div id="drawerContent"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Footer -->
+<div class="footer">
+  Propulsé par <a href="index.html">AET Technology</a> — Lomé, Togo 🇹🇬<br>
+  <span style="margin-top:4px;display:block">Vous avez une boutique ? <a href="index.html">Créez la vôtre gratuitement</a></span>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:        "AIzaSyB5hpkRlFZ9HFRRbpQlvpHwMNDja37Nr2s",
+  authDomain:    "gestion-salaire-9d3e9.firebaseapp.com",
+  databaseURL:   "https://gestion-salaire-9d3e9-default-rtdb.firebaseio.com",
+  projectId:     "gestion-salaire-9d3e9",
+  storageBucket: "gestion-salaire-9d3e9.firebasestorage.app",
+  messagingSenderId: "349912671512",
+  appId:         "1:349912671512:web:placeholder"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── Icônes par type de boutique ──
+const TYPE_ICONS = {
+  alimentaire:'🍞', electronique:'📱', vetement:'👗', beaute:'💄',
+  maison:'🏠', sante:'💊', service:'🔧', pharmacie:'💊', librairie:'📚',
+  informatique:'💻', telephone:'📲', automobile:'🚗', agriculture:'🌱',
+  artisanat:'🎨', bijouterie:'💍', sport:'⚽', autre:'📦'
+};
+const TYPE_LABELS = {
+  alimentaire:'Alimentation', electronique:'Électronique', vetement:'Vêtements',
+  beaute:'Beauté & Cosmétiques', maison:'Maison & Déco', sante:'Santé',
+  pharmacie:'Pharmacie', librairie:'Librairie', informatique:'Informatique',
+  telephone:'Téléphonie', automobile:'Automobile', agriculture:'Agriculture',
+  artisanat:'Artisanat', bijouterie:'Bijouterie', sport:'Sport', service:'Services', autre:'Autre'
+};
+
+// Couleurs de fond par type
+const TYPE_BG = {
+  alimentaire:'linear-gradient(135deg,#ecfdf5,#d1fae5)',
+  electronique:'linear-gradient(135deg,#eff6ff,#dbeafe)',
+  vetement:'linear-gradient(135deg,#fdf4ff,#f3e8ff)',
+  beaute:'linear-gradient(135deg,#fff1f2,#ffe4e6)',
+  maison:'linear-gradient(135deg,#fffbeb,#fef3c7)',
+  sante:'linear-gradient(135deg,#ecfdf5,#d1fae5)',
+  service:'linear-gradient(135deg,#f0f9ff,#e0f2fe)',
+  autre:'linear-gradient(135deg,#f8fafc,#f1f5f9)'
+};
+
+window._allShops = [];
+window._currentCat = 'all';
+
+// ── Charge toutes les boutiques ──
+async function loadShops(){
+  try {
+    const snap = await getDocs(collection(db, 'commerce_data'));
+    const shops = [];
+    let totalProducts = 0;
+    const cities = new Set();
+
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      const uid  = docSnap.id;
+      // Ignorer les comptes sans boutique publique activée
+      if(!data.shops || !data.shops.length) return;
+
+      data.shops.forEach(shop => {
+        // Uniquement les boutiques marquées publiques (ou toutes si pas de flag)
+        if(shop.isPublic === false) return;
+
+        const articles = (data.articles||[]).filter(a => a.shopId === shop.id);
+        totalProducts += articles.length;
+        if(shop.city) cities.add(shop.city);
+
+        shops.push({
+          uid,
+          shopId:    shop.id,
+          name:      shop.name || 'Boutique sans nom',
+          type:      shop.type || 'autre',
+          customType:shop.customType || '',
+          city:      shop.city || '',
+          country:   shop.country || 'Togo',
+          addr:      shop.addr || '',
+          logo:      shop.logoUrl || (shop.branding && shop.branding.logoUrl) || '',
+          banner:    (shop.branding && shop.branding.bgUrl) || '',
+          slogan:    (shop.branding && shop.branding.slogan) || '',
+          articles,
+          createdAt: shop.createdAt || 0,
+          isNew:     (Date.now() - (shop.createdAt||0)) < 7*24*3600*1000
+        });
+      });
+    });
+
+    window._allShops = shops;
+    document.getElementById('statShops').textContent    = shops.length;
+    document.getElementById('statProducts').textContent = totalProducts;
+    document.getElementById('statCities').textContent   = cities.size || 1;
+
+    applyFilters();
+  } catch(e){
+    console.error(e);
+    document.getElementById('shopsGrid').innerHTML =
+      '<div class="empty" style="grid-column:1/-1"><i class="fas fa-wifi-slash"></i><p>Erreur de chargement. Vérifiez votre connexion.</p></div>';
+  }
+}
+
+window.applyFilters = function(){
+  const term  = (document.getElementById('searchInput').value||'').toLowerCase();
+  const cat   = window._currentCat || 'all';
+  const sort  = document.getElementById('sortSelect').value;
+
+  let list = window._allShops.slice();
+
+  // Filtre catégorie
+  if(cat !== 'all') list = list.filter(s => s.type === cat || s.customType === cat);
+
+  // Recherche texte
+  if(term) list = list.filter(s =>
+    s.name.toLowerCase().includes(term) ||
+    s.city.toLowerCase().includes(term) ||
+    s.slogan.toLowerCase().includes(term) ||
+    s.articles.some(a => (a.name||'').toLowerCase().includes(term))
+  );
+
+  // Tri
+  if(sort === 'recent')   list.sort((a,b) => b.createdAt - a.createdAt);
+  if(sort === 'products') list.sort((a,b) => b.articles.length - a.articles.length);
+  if(sort === 'alpha')    list.sort((a,b) => a.name.localeCompare(b.name));
+
+  document.getElementById('resultCount').textContent =
+    list.length ? `${list.length} boutique${list.length>1?'s':''}` : 'Aucune boutique';
+
+  renderShops(list);
+};
+
+function renderShops(list){
+  const grid = document.getElementById('shopsGrid');
+  if(!list.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fas fa-store-slash"></i><p>Aucune boutique trouvée</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(s => {
+    const icon   = TYPE_ICONS[s.type] || '📦';
+    const label  = s.customType || TYPE_LABELS[s.type] || 'Boutique';
+    const bg     = TYPE_BG[s.type] || TYPE_BG.autre;
+    const loc    = [s.city, s.country].filter(Boolean).join(', ') || 'Togo';
+    const nbArt  = s.articles.length;
+    // Miniature image du 1er article
+    const firstImg = s.articles.find(a => a.imageUrl)?.imageUrl || '';
+
+    return `
+    <div class="shop-card" onclick="openShop('${esc(s.uid)}','${esc(s.shopId)}')">
+      <div class="shop-banner" style="background:${bg}">
+        ${s.banner ? `<img src="${esc(s.banner)}" alt="">` :
+          firstImg  ? `<img src="${esc(firstImg)}" alt="">` :
+          `<span class="shop-banner-icon">${icon}</span>`}
+        ${s.isNew ? '<span class="shop-badge-new">NOUVEAU</span>' : ''}
+        <div class="shop-logo">
+          ${s.logo ? `<img src="${esc(s.logo)}" alt="">` : esc((s.name||'B').slice(0,2).toUpperCase())}
+        </div>
+      </div>
+      <div class="shop-body">
+        <div class="shop-name">${esc(s.name)}</div>
+        <div class="shop-type">${icon} ${esc(label)}</div>
+        <div class="shop-location"><i class="fas fa-location-dot"></i>${esc(loc)}</div>
+        <div class="shop-stats">
+          ${s.slogan ? `<div class="shop-stat" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px" title="${esc(s.slogan)}"><i class="fas fa-quote-left"></i>${esc(s.slogan.slice(0,30))}…</div>` : ''}
+        </div>
+        <button class="shop-btn">Visiter la boutique →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.openShop = function(uid, shopId){
+  const s = window._allShops.find(x => x.uid === uid && x.shopId === shopId);
+  if(!s) return;
+  const icon  = TYPE_ICONS[s.type] || '📦';
+  const label = s.customType || TYPE_LABELS[s.type] || 'Boutique';
+  const loc   = [s.addr, s.city, s.country].filter(Boolean).join(' • ') || 'Togo';
+  const bg    = TYPE_BG[s.type] || TYPE_BG.autre;
+
+  const miniProds = '';
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-header">
+      <div class="drawer-logo" style="background:${bg}">
+        ${s.logo ? `<img src="${esc(s.logo)}" alt="">` : `<span style="color:var(--text)">${esc((s.name||'B').slice(0,2).toUpperCase())}</span>`}
+      </div>
+      <div>
+        <div class="drawer-name">${esc(s.name)}</div>
+        <div class="drawer-type">${icon} ${esc(label)}</div>
+      </div>
+    </div>
+    ${s.slogan ? `<div class="drawer-desc">"${esc(s.slogan)}"</div>` : ''}
+    <div class="drawer-meta">
+      <div class="meta-item">
+        <div class="meta-label"><i class="fas fa-location-dot" style="margin-right:4px"></i>Localisation</div>
+        <div class="meta-val">${esc(loc)}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label"><i class="fas fa-box" style="margin-right:4px"></i>Produits</div>
+        <div class="meta-val">${s.articles.length} article${s.articles.length>1?'s':''}</div>
+      </div>
+    </div>
+    ${miniProds}
+    <button class="btn-visit" onclick="visitShop('${esc(uid)}')">
+      <i class="fas fa-store" style="margin-right:8px"></i>Ouvrir la boutique
+    </button>
+    <button style="width:100%;margin-top:8px;padding:12px;background:transparent;border:1.5px solid var(--border);border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)" onclick="shareShop('${esc(uid)}','${esc(s.name)}')">
+      <i class="fas fa-share-nodes" style="margin-right:6px"></i>Partager cette boutique
+    </button>
+  `;
+  document.getElementById('shopOverlay').classList.add('open');
+};
+
+window.visitShop = function(uid){
+  const base = window.location.origin + window.location.pathname.replace('public.html','');
+  window.location.href = base + 'boutique.html?tenant=' + encodeURIComponent(uid);
+};
+
+window.shareShop = function(uid, name){
+  const base = window.location.origin + window.location.pathname.replace('public.html','');
+  const url  = base + 'boutique.html?tenant=' + encodeURIComponent(uid);
+  if(navigator.share){
+    navigator.share({ title: name, text: 'Visitez ' + name + ' sur TogoSheets Marketplace !', url });
+  } else {
+    navigator.clipboard.writeText(url).then(()=>showToast('Lien copié ! 📋'));
+  }
+};
+
+window.closeShopDrawer = function(){
+  document.getElementById('shopOverlay').classList.remove('open');
+};
+window.closeDrawer = function(e){
+  if(e.target === document.getElementById('shopOverlay')) closeShopDrawer();
+};
+
+window.pickCat = function(el){
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  window._currentCat = el.dataset.cat;
+  applyFilters();
+};
+window.clearSearch = function(){
+  document.getElementById('searchInput').value='';
+  applyFilters();
+};
+
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+function fmtPrice(n){ return Number(n||0).toLocaleString('fr-FR') + ' FCFA'; }
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// Lancement
+loadShops();
+</script>
+</body>
+</html>
