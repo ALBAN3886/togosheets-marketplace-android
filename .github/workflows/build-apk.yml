@@ -20,6 +20,7 @@ jobs:
       - name: Build signed APK
         run: |
           gradle assembleRelease \
+            -PbuildVersionCode=${{ github.run_number }} \
             -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/aet-release.jks \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \

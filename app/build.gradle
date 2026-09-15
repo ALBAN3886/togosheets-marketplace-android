@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
 }
 
+// Le CI (GitHub Actions) passe -PbuildVersionCode=<numéro de build> ;
+// en local (Android Studio), on retombe sur 1 par défaut.
+def appVersionCode = project.hasProperty('buildVersionCode') ? project.property('buildVersionCode').toInteger() : 1
+
 android {
     namespace 'com.aet.togosheets'
     compileSdk 34
@@ -10,8 +14,8 @@ android {
         applicationId "com.aet.togosheets.marketplace"
         minSdk 21
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersionCode
+        versionName "1.0." + appVersionCode
     }
 
     buildTypes {
