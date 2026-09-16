@@ -2,9 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TogoSheets Pro — Marketplace</title>
 <meta name="description" content="Découvrez toutes les boutiques en ligne propulsées par AET Technology">
+<link rel="canonical" href="https://alban3886.github.io/togosheets-marketplace/">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
@@ -55,6 +56,20 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* ── Carte boutique ── */
 .shop-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
 .shop-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:var(--primary)}
+.view-toggle{display:flex;gap:8px;padding:0 16px 10px}
+.view-toggle button{flex:1;padding:9px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)}
+.view-toggle button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.product-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.product-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:var(--primary)}
+.product-img{aspect-ratio:1/1;background:#f1f5f9;display:grid;place-items:center;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-body{padding:10px 12px}
+.product-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-price{font-size:15px;font-weight:900;color:var(--primary);margin-top:2px}
+.product-shop{display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.product-shop-logo{width:20px;height:20px;border-radius:6px;background:var(--bg);display:grid;place-items:center;font-size:10px;font-weight:800;color:var(--primary);flex-shrink:0;overflow:hidden}
+.product-shop-logo img{width:100%;height:100%;object-fit:cover}
+.product-shop-name{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-banner{height:90px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:grid;place-items:center;position:relative;overflow:hidden}
 .shop-banner img{width:100%;height:100%;object-fit:cover}
 .shop-banner-icon{font-size:36px}
@@ -85,9 +100,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .footer a{color:var(--primary);text-decoration:none;font-weight:600}
 
 /* ── Modal boutique detail ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
-.drawer{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px 16px 40px}
+.drawer{
+  background:var(--card);
+  border-radius:24px 24px 0 0;
+  width:100%;
+  max-height:85vh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 16px calc(80px + env(safe-area-inset-bottom));
+  position:relative;
+}
+.drawer-scroll-body{ /* pas de flex, juste du scroll normal */ }
+.drawer-fixed-foot{
+  position:sticky;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--card);
+  padding:10px 0 calc(12px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--border);
+  margin:0 -16px;
+  padding-left:16px;
+  padding-right:16px;
+}
 .drawer-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
 .drawer-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .drawer-logo{width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px;flex-shrink:0}
@@ -133,12 +170,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="hero">
   <h1>🛍️ Boutiques en ligne</h1>
   <p>Découvrez et achetez chez les vendeurs de confiance</p>
-  <div class="hero-stats">
+  <div class="hero-stats" style="display:none">
     <div class="hero-stat">
       <div class="hero-stat-n" id="statShops">—</div>
       <div class="hero-stat-l">Boutiques</div>
     </div>
-    <div class="hero-stat" style="display:none">
+    <div class="hero-stat" id="statProductsWrap">
       <div class="hero-stat-n" id="statProducts">—</div>
       <div class="hero-stat-l">Produits</div>
     </div>
@@ -155,6 +192,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <i class="fas fa-search"></i>
     <input type="text" id="searchInput" placeholder="Chercher une boutique, produit, ville…" oninput="applyFilters()">
     <i class="fas fa-times" style="cursor:pointer;color:var(--muted)" onclick="clearSearch()"></i>
+  </div>
+  <div class="view-toggle">
+    <button id="viewBtnProducts" class="active" onclick="setViewMode('products')">📦 Articles</button>
+    <button id="viewBtnShops" onclick="setViewMode('shops')">🏬 Boutiques</button>
   </div>
   <div class="filters" id="filtersBar">
     <div class="filter-chip active" data-cat="all" onclick="pickCat(this)">Tout</div>
@@ -191,7 +232,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <div class="drawer" id="shopDrawer">
     <div class="drawer-handle"></div>
     <button class="btn-close" onclick="closeShopDrawer()"><i class="fas fa-times"></i></button>
-    <div id="drawerContent"></div>
+    <div id="drawerContent" class="drawer-scroll-body"></div>
+    <div id="drawerFoot" class="drawer-fixed-foot"></div>
   </div>
 </div>
 
@@ -255,7 +297,7 @@ window._currentCat = 'all';
 // ── Charge toutes les boutiques ──
 async function loadShops(){
   try {
-    const snap = await getDocs(collection(db, 'commerce_data'));
+    const snap = await getDocs(collection(db, 'public_shops'));
     const shops = [];
     let totalProducts = 0;
     const cities = new Set();
@@ -284,8 +326,8 @@ async function loadShops(){
           country:   shop.country || 'Togo',
           addr:      shop.addr || '',
           logo:      shop.logoUrl || (shop.branding && shop.branding.logoUrl) || '',
-          banner:    (shop.branding && shop.branding.bgUrl) || '',
-          slogan:    (shop.branding && shop.branding.slogan) || '',
+          banner:    shop.bgUrl || (shop.branding && shop.branding.bgUrl) || '',
+          slogan:    shop.slogan || (shop.branding && shop.branding.slogan) || '',
           articles,
           createdAt: shop.createdAt || 0,
           isNew:     (Date.now() - (shop.createdAt||0)) < 7*24*3600*1000
@@ -294,6 +336,7 @@ async function loadShops(){
     });
 
     window._allShops = shops;
+    window.buildAllProducts();
     document.getElementById('statShops').textContent    = shops.length;
     document.getElementById('statProducts').textContent = totalProducts;
     document.getElementById('statCities').textContent   = cities.size || 1;
@@ -302,14 +345,84 @@ async function loadShops(){
   } catch(e){
     console.error(e);
     document.getElementById('shopsGrid').innerHTML =
-      '<div class="empty" style="grid-column:1/-1"><i class="fas fa-wifi-slash"></i><p>Erreur de chargement. Vérifiez votre connexion.</p></div>';
+      '<div class="empty" style="grid-column:1/-1"><i class="fas fa-wifi-slash"></i><p>DEBUG: ' + (e && e.message ? e.message : String(e)) + '</p></div>';
   }
+}
+
+window._viewMode = 'products';
+
+window.setViewMode = function(mode){
+  window._viewMode = mode;
+  document.getElementById('viewBtnProducts').classList.toggle('active', mode === 'products');
+  document.getElementById('viewBtnShops').classList.toggle('active', mode === 'shops');
+  document.getElementById('searchInput').placeholder =
+    mode === 'products' ? 'Chercher un article, une boutique, une ville…' : 'Chercher une boutique, produit, ville…';
+  window.applyFilters();
+};
+
+// Aplatit tous les articles de toutes les boutiques, avec les infos de la boutique attachées à chaque article
+window.buildAllProducts = function(){
+  const out = [];
+  (window._allShops || []).forEach(s => {
+    (s.articles || []).forEach(a => {
+      out.push({
+        ...a,
+        shopUid: s.uid, shopId: s.shopId, shopName: s.name,
+        shopLogo: s.logo, shopCity: s.city, shopType: s.type, shopCustomType: s.customType
+      });
+    });
+  });
+  window._allProducts = out;
+};
+
+function renderProducts(list){
+  const grid = document.getElementById('shopsGrid');
+  if(!list.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>Aucun article trouvé</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(a => {
+    const price = (a.prixV != null) ? Number(a.prixV).toLocaleString('fr-FR') + ' F' : '';
+    const img = a.photo || a.imageUrl || a.image || '';
+    const logo = a.shopLogo || '';
+    return `
+    <div class="product-card" onclick="openShop('${esc(a.shopUid)}','${esc(a.shopId)}')">
+      <div class="product-img">
+        ${img ? `<img src="${esc(img)}" alt="">` : `<span style="font-size:32px">📦</span>`}
+      </div>
+      <div class="product-body">
+        <div class="product-name">${esc(a.name || 'Article')}</div>
+        <div class="product-price">${price}</div>
+        <div class="product-shop">
+          <div class="product-shop-logo">${logo ? `<img src="${esc(logo)}" alt="">` : esc((a.shopName||'B').slice(0,2).toUpperCase())}</div>
+          <div class="product-shop-name">${esc(a.shopName || 'Boutique')}${a.shopCity ? ' · ' + esc(a.shopCity) : ''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 window.applyFilters = function(){
   const term  = (document.getElementById('searchInput').value||'').toLowerCase();
   const cat   = window._currentCat || 'all';
   const sort  = document.getElementById('sortSelect').value;
+
+  if(window._viewMode === 'products'){
+    let list = (window._allProducts || []).slice();
+    if(cat !== 'all') list = list.filter(a => a.shopType === cat || a.shopCustomType === cat);
+    if(term) list = list.filter(a =>
+      (a.name||'').toLowerCase().includes(term) ||
+      (a.shopName||'').toLowerCase().includes(term) ||
+      (a.shopCity||'').toLowerCase().includes(term)
+    );
+    if(sort === 'recent')   list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    if(sort === 'products') list.sort((a,b) => (b.prixV||0) - (a.prixV||0));
+    if(sort === 'alpha')    list.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    document.getElementById('resultCount').textContent =
+      list.length ? `${list.length} article${list.length>1?'s':''}` : 'Aucun article';
+    renderProducts(list);
+    return;
+  }
 
   let list = window._allShops.slice();
 
@@ -406,6 +519,8 @@ window.openShop = function(uid, shopId){
       </div>
     </div>
     ${miniProds}
+  `;
+  document.getElementById('drawerFoot').innerHTML = `
     <button class="btn-visit" onclick="visitShop('${esc(uid)}')">
       <i class="fas fa-store" style="margin-right:8px"></i>Ouvrir la boutique
     </button>
@@ -460,5 +575,179 @@ function showToast(msg){
 // Lancement
 loadShops();
 </script>
+
+<!-- AET PUBLIC MODERN PATCH -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0f766e">
+<style id="aet-public-modern-style">
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter','Segoe UI',system-ui,sans-serif !important;
+  background:radial-gradient(circle at top,#ecfdf5 0%,#f8fafc 32%,#f8fafc 100%) !important;
+}
+.header{
+  backdrop-filter:blur(18px);
+  background:linear-gradient(135deg,rgba(5,150,105,.96),rgba(16,185,129,.94),rgba(52,211,153,.92)) !important;
+}
+.hero{
+  padding:32px 16px 18px !important;
+  background:linear-gradient(180deg,#ecfdf5 0%,rgba(236,253,245,.82) 55%,rgba(248,250,252,.4) 100%) !important;
+}
+.hero h1{font-size:clamp(24px,4vw,34px) !important;letter-spacing:-.02em}
+.hero p{max-width:640px;margin:0 auto 18px !important;font-size:14px !important;line-height:1.65}
+.hero-stats{gap:12px !important;flex-wrap:wrap}
+.hero-stat{
+  min-width:118px;
+  padding:12px 16px;
+  border:1px solid rgba(16,185,129,.14);
+  border-radius:18px;
+  background:rgba(255,255,255,.74);
+  box-shadow:0 12px 28px rgba(15,23,42,.06);
+}
+.search-wrap{position:sticky;top:70px;z-index:90}
+.search-box{
+  border-width:1px !important;
+  border-color:rgba(148,163,184,.28) !important;
+  border-radius:18px !important;
+  padding:12px 15px !important;
+  box-shadow:0 14px 34px rgba(15,23,42,.08) !important;
+  backdrop-filter:blur(12px);
+}
+.filter-chip{border-radius:999px !important;padding:8px 15px !important}
+.filter-chip.active{box-shadow:0 10px 22px rgba(16,185,129,.26)}
+.sort-bar{padding-bottom:12px !important}
+.sort-select{padding:8px 12px !important;border-radius:12px !important}
+.grid{
+  max-width:1120px !important;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
+  gap:16px !important;
+  padding-bottom:calc(100px + env(safe-area-inset-bottom)) !important;
+}
+.shop-card{
+  border:1px solid rgba(226,232,240,.95) !important;
+  border-radius:22px !important;
+  box-shadow:0 18px 34px rgba(15,23,42,.08) !important;
+}
+.shop-card:hover{transform:translateY(-5px) !important;box-shadow:0 22px 44px rgba(15,23,42,.14) !important}
+.shop-banner{height:112px !important}
+.shop-logo{width:52px !important;height:52px !important;bottom:-22px !important;border-width:4px !important}
+.shop-body{padding:30px 14px 14px !important}
+.shop-name{font-size:15px !important}
+.shop-type{font-size:12px !important}
+.shop-location{font-size:12px !important;margin-bottom:10px !important}
+.shop-btn{
+  margin-top:14px !important;
+  padding:11px 12px !important;
+  border-radius:14px !important;
+  font-size:13px !important;
+  box-shadow:0 10px 20px rgba(16,185,129,.25);
+}
+.overlay{backdrop-filter:blur(4px)}
+.drawer{
+  border-radius:30px 30px 0 0 !important;
+  max-width:760px;
+  margin:0 auto;
+  box-shadow:0 24px 50px rgba(15,23,42,.24);
+  /* pas de padding-bottom ici — géré par drawer-fixed-foot */
+}
+.drawer-header{align-items:flex-start !important}
+.drawer-meta{grid-template-columns:repeat(auto-fit,minmax(160px,1fr)) !important}
+.meta-item{border:1px solid rgba(226,232,240,.95);background:linear-gradient(180deg,#fff,#f8fafc) !important}
+.drawer-products h4{font-size:12px !important;letter-spacing:.08em !important}
+.mini-product{border:1px solid rgba(226,232,240,.92);background:#fff !important;box-shadow:0 10px 24px rgba(15,23,42,.05)}
+.mini-product-img{height:72px !important}
+.mini-product-name{font-size:11px !important;padding-top:8px !important}
+.mini-product-price{font-size:11px !important;padding-bottom:8px !important}
+.btn-visit{border-radius:16px !important;box-shadow:0 14px 26px rgba(16,185,129,.25)}
+.footer{
+  padding:22px 16px calc(24px + env(safe-area-inset-bottom)) !important;
+  background:linear-gradient(180deg,#ffffff,#f8fafc) !important;
+}
+.toast{bottom:calc(92px + env(safe-area-inset-bottom)) !important;padding:12px 20px !important;border-radius:14px !important;box-shadow:0 18px 36px rgba(15,23,42,.18)}
+@media (max-width:640px){
+  .search-wrap{top:64px}
+  .grid{grid-template-columns:1fr 1fr !important;gap:12px !important}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:1fr !important}
+  .hero-stat{min-width:unset;flex:1}
+}
+</style>
+<script id="aet-public-modern-script">
+(function(){
+  const TYPE_ICONS = {
+    alimentaire:'🍞', electronique:'📱', vetement:'👗', beaute:'💄', maison:'🏠', sante:'💊', service:'🔧', pharmacie:'💊', librairie:'📚', informatique:'💻', telephone:'📲', automobile:'🚗', agriculture:'🌱', artisanat:'🎨', bijouterie:'💍', sport:'⚽', autre:'📦'
+  };
+  const TYPE_LABELS = {
+    alimentaire:'Alimentation', electronique:'Électronique', vetement:'Vêtements', beaute:'Beauté & Cosmétiques', maison:'Maison & Déco', sante:'Santé', pharmacie:'Pharmacie', librairie:'Librairie', informatique:'Informatique', telephone:'Téléphonie', automobile:'Automobile', agriculture:'Agriculture', artisanat:'Artisanat', bijouterie:'Bijouterie', sport:'Sport', service:'Services', autre:'Autre'
+  };
+  const TYPE_BG = {
+    alimentaire:'linear-gradient(135deg,#ecfdf5,#d1fae5)', electronique:'linear-gradient(135deg,#eff6ff,#dbeafe)', vetement:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', beaute:'linear-gradient(135deg,#fff1f2,#ffe4e6)', maison:'linear-gradient(135deg,#fffbeb,#fef3c7)', sante:'linear-gradient(135deg,#ecfdf5,#d1fae5)', service:'linear-gradient(135deg,#f0f9ff,#e0f2fe)', autre:'linear-gradient(135deg,#f8fafc,#f1f5f9)'
+  };
+  function esc(v){ const d=document.createElement('div'); d.textContent=String(v ?? ''); return d.innerHTML; }
+  function fmtPrice(n){ return Number(n||0).toLocaleString('fr-FR') + ' FCFA'; }
+  function shopUrl(uid, shopId){
+    const base = window.location.origin + window.location.pathname.replace('public.html','');
+    const params = new URLSearchParams();
+    if (uid) params.set('tenant', uid);
+    if (shopId) params.set('store', shopId);
+    return base + 'boutique.html?' + params.toString();
+  }
+  const nativeToast = window.showToast;
+  window.showToast = function(msg){
+    const t=document.getElementById('toast');
+    if (!t) return nativeToast ? nativeToast(msg) : void 0;
+    clearTimeout(window.__aetPublicToast);
+    t.textContent = msg;
+    t.classList.add('show');
+    window.__aetPublicToast = setTimeout(()=>t.classList.remove('show'), 2600);
+  };
+  window.visitShop = function(uid, shopId){
+    window.location.href = shopUrl(uid, shopId);
+  };
+  window.shareShop = function(uid, shopId, name){
+    const url = shopUrl(uid, shopId);
+    if (navigator.share) navigator.share({title:name,text:'Visitez ' + name + ' sur TogoSheets Marketplace !',url}).catch(()=>{});
+    else navigator.clipboard.writeText(url).then(()=>window.showToast('Lien boutique copié.'));
+  };
+  window.openShop = function(uid, shopId){
+    const s = (window._allShops || []).find(x => x.uid === uid && x.shopId === shopId);
+    if(!s) return;
+    const icon  = TYPE_ICONS[s.type] || '📦';
+    const label = s.customType || TYPE_LABELS[s.type] || 'Boutique';
+    const loc   = [s.addr, s.city, s.country].filter(Boolean).join(' • ') || 'Togo';
+    const bg    = TYPE_BG[s.type] || TYPE_BG.autre;
+    const miniCards = (s.articles || []).slice(0, 3).map(a => {
+      const img = a.imageUrl || a.photoUrl || a.img || a.photo || a.image || '';
+      const price = Number(a.prixV ?? a.prixVente ?? a.prix ?? 0);
+      return `<div class="mini-product"><div class="mini-product-img">${img ? `<img src="${esc(img)}" alt="">` : `<span>${esc(icon)}</span>`}</div><div class="mini-product-name">${esc(a.name || a.nom || 'Article')}</div><div class="mini-product-price">${fmtPrice(price)}</div></div>`;
+    }).join('');
+    const miniSection = miniCards ? `<div class="drawer-products"><h4>Articles en vitrine</h4><div class="mini-products">${miniCards}</div></div>` : '';
+    document.getElementById('drawerContent').innerHTML = `
+      <div class="drawer-header">
+        <div class="drawer-logo" style="background:${bg}">
+          ${s.logo ? `<img src="${esc(s.logo)}" alt="">` : `<span style="color:var(--text)">${esc((s.name||'B').slice(0,2).toUpperCase())}</span>`}
+        </div>
+        <div>
+          <div class="drawer-name">${esc(s.name)}</div>
+          <div class="drawer-type">${icon} ${esc(label)}</div>
+        </div>
+      </div>
+      ${s.slogan ? `<div class="drawer-desc">${esc(s.slogan)}</div>` : ''}
+      <div class="drawer-meta">
+        <div class="meta-item"><div class="meta-label"><i class="fas fa-location-dot" style="margin-right:4px"></i>Localisation</div><div class="meta-val">${esc(loc)}</div></div>
+        <div class="meta-item"><div class="meta-label"><i class="fas fa-box" style="margin-right:4px"></i>Produits</div><div class="meta-val">${(s.articles||[]).length} article${(s.articles||[]).length>1?'s':''}</div></div>
+      </div>
+      ${miniSection}
+      <button class="btn-visit" onclick="visitShop('${esc(uid)}','${esc(s.shopId)}')"><i class="fas fa-store" style="margin-right:8px"></i>Ouvrir la boutique</button>
+      <button style="width:100%;margin-top:8px;padding:12px;background:transparent;border:1.5px solid var(--border);border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)" onclick="shareShop('${esc(uid)}','${esc(s.shopId)}','${esc(s.name)}')"><i class="fas fa-share-nodes" style="margin-right:6px"></i>Partager cette boutique</button>
+    `;
+    document.getElementById('shopOverlay').classList.add('open');
+  };
+})();
+</script>
+
 </body>
 </html>
