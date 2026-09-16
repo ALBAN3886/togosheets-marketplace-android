@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 public class MainActivity extends Activity {
 
     private WebView webView;
-    private static final String URL = "https://alban3886.github.io/togosheets-pro/public.html";
+    private static final String URL = "https://alban3886.github.io/togosheets-marketplace/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
