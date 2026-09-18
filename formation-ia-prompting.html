@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation IA & Prompting — AET</title>
+<meta name="description" content="Formation complète en Intelligence Artificielle et Prompting, du débutant à la maîtrise professionnelle. AET — Alban Eloh Technology.">
+<link rel="canonical" href="https://alban3886.github.io/AETweb/formation-ia-prompting.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Epilogue:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --s1: #0d0d14;
+  --s2: #14141f;
+  --border: #1e1e2e;
+  --text: #ddddf0;
+  --muted: #5a5a7a;
+  --n1: #ff6b35;
+  --n2: #4ecdc4;
+  --n3: #ffe66d;
+  --n4: #c77dff;
+  --gold: #F2B705;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Epilogue',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px;position:relative;z-index:1;}
+a{color:inherit;}
+
+/* NAV BACK */
+.topnav{padding:18px 0 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;}
+.topnav a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;}
+.topnav a:hover{color:var(--n1);border-color:var(--n1);}
+
+/* HERO */
+header{padding:36px 0 48px;position:relative;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--border);padding:5px 14px;border-radius:100px;
+  margin-bottom:28px;
+}
+.eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+h1{font-size:clamp(2.4rem,6.4vw,4.6rem);font-weight:900;line-height:.96;letter-spacing:-.03em;margin-bottom:20px;}
+h1 .t-ia{color:var(--gold);}
+.hero-sub{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:28px;}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{
+  font-family:'Epilogue',sans-serif;font-weight:700;font-size:14px;
+  padding:13px 24px;border-radius:6px;text-decoration:none;cursor:pointer;
+  border:1px solid transparent;display:inline-block;
+}
+.btn-gold{background:var(--gold);color:#151008;}
+.btn-gold:hover{opacity:.9;}
+.btn-line{background:transparent;color:var(--text);border-color:var(--border);}
+.btn-line:hover{border-color:var(--gold);color:var(--gold);}
+
+/* STAT ROW */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:36px 0;}
+.stat{background:var(--s1);padding:18px 16px;text-align:center;transition:background .2s;}
+.stat:hover{background:var(--s2);}
+.stat-n{font-size:1.8rem;font-weight:900;line-height:1;font-family:'DM Mono',monospace;color:var(--gold);}
+.stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;}
+
+/* PROGRESS */
+.prog-wrap{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin-bottom:32px;}
+.prog-label{display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;}
+.prog-label strong{color:var(--gold);font-size:14px;}
+.track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.fill{height:100%;border-radius:2px;width:0%;background:linear-gradient(90deg,var(--n1),var(--n2),var(--n3),var(--n4));transition:width .5s ease;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px;}
+.tab{padding:9px 20px;border-radius:4px;border:1px solid var(--border);background:var(--s1);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.tab:hover{border-color:var(--gold);color:var(--gold);}
+.tab[data-w="1"].on{background:var(--n1);border-color:var(--n1);color:#000;font-weight:500;}
+.tab[data-w="2"].on{background:var(--n2);border-color:var(--n2);color:#000;font-weight:500;}
+.tab[data-w="3"].on{background:var(--n3);border-color:var(--n3);color:#000;font-weight:500;}
+.tab[data-w="4"].on{background:var(--n4);border-color:var(--n4);color:#000;font-weight:500;}
+
+.wk{display:none;animation:fadeUp .3s ease;}
+.wk.on{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.wk-hd{display:flex;align-items:center;gap:20px;padding:22px 26px;border-radius:6px;border-left:3px solid;margin-bottom:20px;}
+.wk[data-w="1"] .wk-hd{background:rgba(255,107,53,.06);border-color:var(--n1);}
+.wk[data-w="2"] .wk-hd{background:rgba(78,205,196,.06);border-color:var(--n2);}
+.wk[data-w="3"] .wk-hd{background:rgba(255,230,109,.06);border-color:var(--n3);}
+.wk[data-w="4"] .wk-hd{background:rgba(199,125,255,.06);border-color:var(--n4);}
+.wk-n{font-size:2.6rem;font-weight:900;opacity:.12;line-height:1;font-family:'DM Mono',monospace;}
+.wk-info h2{font-size:1.15rem;font-weight:800;}
+.wk-info p{font-size:12px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;}
+.wk-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:4px 12px;border-radius:100px;font-weight:500;}
+.wk[data-w="1"] .wk-badge{background:rgba(255,107,53,.15);color:var(--n1);}
+.wk[data-w="2"] .wk-badge{background:rgba(78,205,196,.15);color:var(--n2);}
+.wk[data-w="3"] .wk-badge{background:rgba(255,230,109,.15);color:var(--n3);}
+.wk[data-w="4"] .wk-badge{background:rgba(199,125,255,.15);color:var(--n4);}
+
+.days{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.dc{background:var(--s1);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+.dc:hover{border-color:rgba(242,183,5,.3);}
+.dc-hd{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;user-select:none;}
+.chk{width:18px;height:18px;flex-shrink:0;border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:all .15s;color:transparent;}
+.chk.done{background:var(--n2);border-color:var(--n2);color:#000;}
+.dnum{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);min-width:34px;letter-spacing:.05em;}
+.dtitle{font-size:13px;font-weight:600;flex:1;}
+.dtags{display:flex;gap:5px;align-items:center;}
+.dtag{font-size:9px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;}
+.chev{color:var(--muted);font-size:10px;transition:transform .2s;flex-shrink:0;}
+.dc.open .chev{transform:rotate(180deg);}
+.dc-bd{display:none;padding:0 18px 18px;border-top:1px solid var(--border);}
+.dc.open .dc-bd{display:block;}
+.sec{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 8px;}
+.obj, .res{list-style:none;padding:0;font-size:13px;line-height:1.7;}
+.obj li{padding-left:16px;position:relative;}
+.obj li::before{content:'—';position:absolute;left:0;color:var(--gold);}
+.prompt-box{
+  background:var(--bg);border:1px solid var(--border);border-radius:6px;
+  padding:14px 16px;font-family:'DM Mono',monospace;font-size:12px;
+  color:#c9c9e8;line-height:1.6;margin-top:6px;
+}
+
+.proj-card{background:var(--s1);border:1px solid var(--gold);border-radius:8px;padding:26px;margin:30px 0;}
+.proj-title{font-size:1.05rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.proj-icon{font-size:1.3rem;}
+.proj-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.proj-steps{list-style:none;padding:0;font-size:13px;line-height:1.8;}
+.proj-steps li{padding-left:18px;position:relative;}
+.proj-steps li::before{content:'✓';position:absolute;left:0;color:var(--gold);}
+
+/* INSCRIPTION */
+.inscription{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:28px;margin:48px 0;}
+.inscription h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.inscription > p{font-size:13px;color:var(--muted);margin-bottom:22px;font-family:'DM Mono',monospace;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;}
+.field input, .field select{
+  width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:6px;
+  font-family:'Epilogue',sans-serif;font-size:14px;background:var(--bg);color:var(--text);
+}
+.field input:focus, .field select:focus{outline:1px solid var(--gold);}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media (max-width:560px){ .row-2{grid-template-columns:1fr;} }
+.submit-row{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;}
+.form-note{font-size:11px;color:var(--muted);margin-top:12px;font-family:'DM Mono',monospace;}
+.status-msg{font-size:12.5px;margin-top:12px;padding:10px 12px;border-radius:6px;display:none;background:rgba(78,205,196,.12);color:var(--n2);}
+.status-msg.show{display:block;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:40px;}
+@media (max-width:600px){ .contact-grid{grid-template-columns:1fr;} }
+.contact-item{background:var(--s1);padding:18px;}
+.contact-item .label{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.contact-item a{font-size:14px;font-weight:700;text-decoration:none;color:var(--text);}
+.contact-item a:hover{color:var(--gold);}
+
+footer{border-top:1px solid var(--border);padding:26px 0;margin-top:20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="topnav"><a href="index.html">← Web Dev 30 Jours</a></nav>
+
+  <header>
+    <div class="eyebrow"><span></span> AET — Nouvelle formation 2026</div>
+    <h1>Maîtrise le prompting<br>et parle enfin à l'<span class="t-ia">IA.</span></h1>
+    <p class="hero-sub">// Formation complète en Intelligence Artificielle & Prompting — du débutant à la maîtrise professionnelle. 100% pratique, accessible depuis ton téléphone.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="#inscription">Réserver ma place</a>
+      <a class="btn btn-line" href="#programme">Voir le programme</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Niveaux</div></div>
+      <div class="stat"><div class="stat-n">23</div><div class="stat-l">Modules</div></div>
+      <div class="stat"><div class="stat-n">20</div><div class="stat-l">Semaines</div></div>
+      <div class="stat"><div class="stat-n">1</div><div class="stat-l">Certification</div></div>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-label">
+        <span>Progression du programme</span>
+        <strong><span id="done-count">0</span>/23 modules · <span id="pct">0%</span></strong>
+      </div>
+      <div class="track"><div class="fill" id="fill"></div></div>
+    </div>
+  </header>
+
+  <div id="programme">
+    <div class="tabs">
+      <div class="tab on" data-w="1" onclick="show(1)">Niveau 1 — Initiation</div>
+      <div class="tab" data-w="2" onclick="show(2)">Niveau 2 — Prompting</div>
+      <div class="tab" data-w="3" onclick="show(3)">Niveau 3 — Pro</div>
+      <div class="tab" data-w="4" onclick="show(4)">Niveau 4 — Maîtrise</div>
+    </div>
+    <div id="weeks"></div>
+  </div>
+
+  <div class="proj-card">
+    <div class="proj-title"><span class="proj-icon">🎓</span> Examen final AET — Certification</div>
+    <div class="proj-desc">Épreuve finale en 5 parties, notée sur 100 points, avec attestation de compétence AET à la clé.</div>
+    <ul class="proj-steps">
+      <li>Prompting — construire un prompt professionnel complet</li>
+      <li>Application — plan de contenu 7 jours + script vidéo 30s</li>
+      <li>Workflow — schématiser un processus IA avec contrôle humain</li>
+      <li>Vérification — auditer une réponse IA (faits, hypothèses, manques)</li>
+      <li>Projet — présenter un projet IA complet, du problème à la démonstration</li>
+    </ul>
+  </div>
+
+  <div class="inscription" id="inscription">
+    <h2>Réserve ta place</h2>
+    <p>// Ton message s'ouvrira automatiquement dans ton mail ou WhatsApp, prêt à envoyer à AET.</p>
+    <form id="regForm">
+      <div class="row-2">
+        <div class="field"><label for="nom">Nom complet</label><input type="text" id="nom" required placeholder="Ex : Ama Koffi"></div>
+        <div class="field"><label for="tel">Téléphone</label><input type="tel" id="tel" required placeholder="Ex : 99 00 00 00"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label for="email">Email (optionnel)</label><input type="email" id="email" placeholder="ton@email.com"></div>
+        <div class="field">
+          <label for="niveau">Niveau souhaité</label>
+          <select id="niveau">
+            <option>Je ne sais pas encore — à conseiller</option>
+            <option>Niveau 1 — Initiation à l'IA</option>
+            <option>Niveau 2 — Maîtrise du prompting</option>
+            <option>Niveau 3 — IA professionnelle</option>
+            <option>Niveau 4 — Maîtrise avancée</option>
+            <option>Formation complète (Niveaux 1 à 4)</option>
+          </select>
+        </div>
+      </div>
+      <div class="submit-row">
+        <button type="submit" class="btn btn-gold">Envoyer par email</button>
+        <a class="btn btn-line" id="waBtn" href="#" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
+      </div>
+      <p class="form-note">// Aucune donnée n'est conservée sur cette page — ta demande part directement vers AET.</p>
+      <div class="status-msg" id="statusMsg">Message prêt — vérifie ton application mail pour l'envoyer.</div>
+    </form>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-item"><div class="label">Téléphone</div><a href="tel:+22899812072">+228 99 81 20 72</a></div>
+    <div class="contact-item"><div class="label">WhatsApp / alt.</div><a href="tel:+22893003941">93 00 39 41</a></div>
+    <div class="contact-item"><div class="label">Facebook</div><a href="https://www.facebook.com/le.media3.0" target="_blank" rel="noopener">le.media3.0</a></div>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <div class="wrap">
+    <div>// AET — Alban Eloh Technology — Formation IA & Prompting — Apprendre aujourd'hui, réussir demain !</div>
+  </div>
+</footer>
+
+<script>
+const MODULES = [
+  {n:1,niv:1,titre:"Découvrir l'intelligence artificielle",objectif:"Comprendre ce que sont l'IA, l'IA générative et les assistants conversationnels.",retenir:["Définition simple de l'IA","IA générative et exemples","Texte, image, audio, vidéo et code","Limites, erreurs et hallucinations","Pourquoi vérifier les informations"],prompt:"Explique l'intelligence artificielle simplement, puis donne trois exemples concrets de son utilisation dans la vie quotidienne."},
+  {n:2,niv:1,titre:"Prendre en main un assistant IA",objectif:"Savoir démarrer une conversation, donner une consigne, demander une correction et poursuivre un échange.",retenir:["Interface et conversation","Question vs instruction","Contexte","Pièces jointes et multimodalité","Itération"],prompt:"Tu es mon assistant d'apprentissage. Pose-moi 5 questions pour comprendre mon objectif, puis construis un plan d'apprentissage sur 7 jours."},
+  {n:3,niv:1,titre:"Poser des demandes claires",objectif:"Passer d'une demande vague à une instruction exploitable.",retenir:["Objectif","Contexte","Public","Ton","Format","Contraintes"],prompt:"Je veux une publicité pour une formation en IA. Pose-moi d'abord les questions nécessaires pour obtenir les informations manquantes, puis rédige la publicité."},
+  {n:4,niv:1,titre:"IA comme assistant personnel",objectif:"Utiliser l'IA pour organiser, apprendre, écrire, résumer et préparer des tâches.",retenir:["Planning","Emails","Résumé","Reformulation","Listes","Préparation de réunion"],prompt:"Organise ces tâches en planning priorisé pour aujourd'hui. Classe-les par urgence et importance, et propose une durée réaliste pour chacune."},
+
+  {n:5,niv:2,titre:"Anatomie d'un bon prompt",objectif:"Construire une instruction complète et contrôlable.",retenir:["Rôle","Tâche","Contexte","Public","Contraintes","Format","Critères de qualité"],prompt:"Agis comme un expert en marketing digital. Contexte : AET prépare une formation pratique en IA destinée aux débutants francophones. Tâche : rédige une publication Facebook. Public : jeunes étudiants, salariés et entrepreneurs. Ton : professionnel, motivant et simple. Contraintes : 180 mots maximum. Format : titre, accroche, bénéfices, programme, appel à l'action."},
+  {n:6,niv:2,titre:"Rôle, contexte et audience",objectif:"Donner à l'IA une mission et un environnement de travail précis.",retenir:["Rôles","Audience","Niveau d'expertise","Contexte métier","Informations disponibles"],prompt:"Tu es un formateur en IA. Explique le prompting à un débutant francophone qui utilise uniquement son téléphone. Utilise des exemples simples et termine par un exercice."},
+  {n:7,niv:2,titre:"Contraintes et formats",objectif:"Contrôler longueur, style, structure et critères de sortie.",retenir:["Nombre de mots","Tableaux","Listes","Étapes","Ton","Interdictions","Critères"],prompt:"Analyse le texte fourni. Donne d'abord un résumé de 80 mots maximum, puis un tableau avec : problème, cause possible, preuve disponible, action proposée. Signale clairement ce qui reste incertain."},
+  {n:8,niv:2,titre:"Itération et amélioration",objectif:"Corriger un premier résultat sans recommencer inutilement.",retenir:["Identifier le défaut","Ajouter une information","Changer le format","Demander une seconde version","Comparer"],prompt:"Évalue ta réponse précédente selon ces critères : précision, clarté, respect des contraintes et utilité. Donne une note descriptive pour chaque critère, identifie les faiblesses puis propose une version améliorée."},
+  {n:9,niv:2,titre:"Décomposer les tâches complexes",objectif:"Transformer une mission importante en étapes contrôlables.",retenir:["Planification","Étapes","Entrées/sorties","Points de contrôle","Validation"],prompt:"Je veux préparer une campagne marketing. Décompose le travail en étapes. Pour chaque étape indique : objectif, informations nécessaires, livrable attendu et point de vérification."},
+  {n:10,niv:2,titre:"Prompts réutilisables",objectif:"Créer une bibliothèque de prompts adaptables.",retenir:["Variables","Placeholders","Versions","Nommage","Documentation"],prompt:"Crée un modèle de prompt réutilisable pour [TYPE DE TÂCHE]. Utilise des champs entre crochets : [OBJECTIF], [PUBLIC], [CONTEXTE], [CONTRAINTES], [FORMAT]. Ajoute une courte notice expliquant comment le personnaliser."},
+
+  {n:11,niv:3,titre:"IA pour les études",objectif:"Utiliser l'IA comme assistant pédagogique sans remplacer le travail personnel.",retenir:["Fiches de révision","Explications","Quiz","Plan d'étude","Correction","Simulation d'examen"],prompt:"Agis comme un tuteur. À partir du cours que je fournis, explique les notions difficiles avec des exemples. Ensuite crée 10 questions progressives. Ne donne pas immédiatement les réponses : attends ma tentative puis corrige-la."},
+  {n:12,niv:3,titre:"IA pour le travail",objectif:"Transformer des informations brutes en documents professionnels.",retenir:["Emails","Rapports","Comptes rendus","Procédures","Synthèses","Présentations"],prompt:"Transforme mes notes en compte rendu professionnel. Conserve uniquement les informations fournies. Sépare : décisions, actions, responsable, échéance et points à clarifier."},
+  {n:13,niv:3,titre:"Création de contenu",objectif:"Produire une stratégie éditoriale cohérente.",retenir:["Idées","Calendrier","Posts","Scripts","Storytelling","CTA"],prompt:"Tu es responsable éditorial. Crée un calendrier de contenu de 30 jours pour [ACTIVITÉ]. Pour chaque jour : sujet, objectif, format, accroche, idée principale et appel à l'action."},
+  {n:14,niv:3,titre:"Images et direction artistique",objectif:"Écrire des prompts visuels précis et reproductibles.",retenir:["Sujet","Composition","Lumière","Décor","Style","Cadrage","Contraintes"],prompt:"Crée un prompt d'image pour une publicité AET : sujet principal, décor, composition, lumière, cadrage, style photographique, texte à éviter dans l'image et format vertical 4:5."},
+  {n:15,niv:3,titre:"IA pour la vidéo",objectif:"Construire une vidéo à partir d'une idée.",retenir:["Concept","Script","Storyboard","Plans","Voix","Sous-titres","CTA"],prompt:"Transforme cette idée en vidéo de 30 secondes. Donne : accroche 0-3s, scène 1, scène 2, scène 3, voix off, texte à l'écran et appel à l'action."},
+  {n:16,niv:3,titre:"IA pour le marketing",objectif:"Construire une campagne complète assistée par IA.",retenir:["Client cible","Proposition de valeur","Message","Canaux","Contenu","Publicité"],prompt:"Construis une campagne marketing pour [PRODUIT]. Commence par définir la cible et son problème principal. Propose ensuite le positionnement, le message central, 3 angles publicitaires, 5 contenus et un plan de test."},
+  {n:17,niv:3,titre:"IA et entrepreneuriat",objectif:"Utiliser l'IA pour structurer une idée d'activité.",retenir:["Problème","Client","Offre","Modèle économique","Acquisition","Opérations"],prompt:"Agis comme un conseiller en création d'entreprise. À partir de mon idée, identifie le problème client, la cible, l'offre, les hypothèses à tester et les premières actions. Distingue les faits fournis des hypothèses."},
+
+  {n:18,niv:4,titre:"Prompting avancé",objectif:"Concevoir des instructions multi-étapes avec critères de qualité.",retenir:["Tâches complexes","Étapes","Exemples","Critères","Vérification","Révision"],prompt:"Agis comme analyste. 1) reformule l'objectif, 2) liste les informations manquantes, 3) analyse les données fournies, 4) distingue faits et hypothèses, 5) produis le résultat dans le format demandé, 6) termine par une section « À vérifier »."},
+  {n:19,niv:4,titre:"Concevoir un assistant spécialisé",objectif:"Créer un cahier des charges d'assistant IA.",retenir:["Mission","Public","Contexte","Règles","Entrées","Sorties","Limites"],prompt:"Conçois les instructions d'un assistant spécialisé en [DOMAINE]. Définis sa mission, son public, les informations qu'il peut utiliser, les règles qu'il doit respecter, son format de sortie et les situations où il doit demander une clarification."},
+  {n:20,niv:4,titre:"Workflows reproductibles",objectif:"Transformer une tâche répétitive en processus documenté.",retenir:["Déclencheur","Entrées","Étapes","Sorties","Contrôles","Responsable"],prompt:"Décris un workflow reproductible pour traiter une demande client. Donne : déclencheur, entrée, étapes, outils, sortie, contrôle humain et critères de réussite."},
+  {n:21,niv:4,titre:"Automatisation",objectif:"Identifier ce qui peut être assisté ou automatisé sans perdre le contrôle humain.",retenir:["Tâches répétitives","Règles","Déclencheurs","Exceptions","Validation"],prompt:"Analyse mon processus de travail. Classe chaque tâche en : manuel, assisté par IA, automatisable avec validation, ou nécessitant un humain. Justifie chaque classement."},
+  {n:22,niv:4,titre:"Vérification, sécurité et qualité",objectif:"Apprendre à contrôler les sorties de l'IA.",retenir:["Vérification factuelle","Sources","Incertitude","Confidentialité","Biais","Validation humaine"],prompt:"Audite ta réponse précédente. Liste les affirmations factuelles, indique lesquelles nécessitent une vérification externe, signale les hypothèses et propose une checklist de contrôle avant publication."},
+  {n:23,niv:4,titre:"Projet final professionnel",objectif:"Construire et présenter un système ou projet IA complet.",retenir:["Problème","Solution","Prompts","Workflow","Livrables","Contrôles","Démonstration"],prompt:"Agis comme mon coach de projet. Aide-moi à définir un projet IA professionnel. Commence par clarifier le problème, puis propose l'architecture du workflow, les prompts, les points de contrôle, les livrables et les critères d'évaluation."},
+];
+
+const NIV_INFO = {
+  1:{titre:"Initiation à l'IA",dur:"4 semaines · Utiliser correctement les assistants IA"},
+  2:{titre:"Maîtrise du prompting",dur:"4 semaines · Construire et améliorer des prompts"},
+  3:{titre:"IA professionnelle",dur:"6 semaines · Études, travail, contenu, marketing, business"},
+  4:{titre:"Maîtrise avancée",dur:"6 semaines · Workflows, assistants et automatisation"},
+};
+
+const weeksEl = document.getElementById('weeks');
+for(let niv=1; niv<=4; niv++){
+  const mods = MODULES.filter(m=>m.niv===niv);
+  const wk = document.createElement('div');
+  wk.className = 'wk' + (niv===1?' on':'');
+  wk.dataset.w = niv;
+  wk.innerHTML = `
+    <div class="wk-hd">
+      <div class="wk-n">N${niv}</div>
+      <div class="wk-info"><h2>${NIV_INFO[niv].titre}</h2><p>${NIV_INFO[niv].dur}</p></div>
+      <div class="wk-badge">${mods.length} modules</div>
+    </div>
+    <div class="days">
+      ${mods.map(m => `
+        <div class="dc" id="d${m.n}">
+          <div class="dc-hd" onclick="tog(${m.n})">
+            <div class="chk" id="c${m.n}" onclick="ck(event,${m.n})"></div>
+            <div class="dnum">M·${String(m.n).padStart(2,'0')}</div>
+            <div class="dtitle">${m.titre}</div>
+            <span class="chev">▼</span>
+          </div>
+          <div class="dc-bd">
+            <div class="sec">// Objectif</div>
+            <p style="font-size:13px;line-height:1.6;">${m.objectif}</p>
+            <div class="sec">// À retenir</div>
+            <ul class="obj">${m.retenir.map(r=>`<li>${r}</li>`).join('')}</ul>
+            <div class="sec">// Prompt de pratique</div>
+            <div class="prompt-box">${m.prompt}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  weeksEl.appendChild(wk);
+}
+
+function tog(n){ document.getElementById('d'+n).classList.toggle('open'); }
+function show(n){
+  document.querySelectorAll('.wk').forEach(w=>w.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelector(`.wk[data-w="${n}"]`).classList.add('on');
+  document.querySelector(`.tab[data-w="${n}"]`).classList.add('on');
+}
+function ck(e,num){
+  e.stopPropagation();
+  const chk=document.getElementById('c'+num);
+  const done=chk.classList.toggle('done');
+  chk.textContent=done?'✓':'';
+  try{
+    const s=JSON.parse(localStorage.getItem('aet_ia_progress')||'{}');
+    s[num]=done;
+    localStorage.setItem('aet_ia_progress', JSON.stringify(s));
+  }catch(err){}
+  upd();
+}
+function upd(){
+  let s={};
+  try{ s=JSON.parse(localStorage.getItem('aet_ia_progress')||'{}'); }catch(err){}
+  const n=Object.values(s).filter(Boolean).length;
+  document.getElementById('done-count').textContent=n;
+  const p=Math.round(n/23*100);
+  document.getElementById('fill').style.width=p+'%';
+  document.getElementById('pct').textContent=p+'%';
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  let s={};
+  try{ s=JSON.parse(localStorage.getItem('aet_ia_progress')||'{}'); }catch(err){}
+  for(const[num,done] of Object.entries(s)){
+    if(done){
+      const chk=document.getElementById('c'+num);
+      if(chk){chk.classList.add('done');chk.textContent='✓';}
+    }
+  }
+  upd();
+});
+
+/* Inscription form */
+const form = document.getElementById('regForm');
+const statusMsg = document.getElementById('statusMsg');
+const waBtn = document.getElementById('waBtn');
+function buildMessage(){
+  const nom = document.getElementById('nom').value.trim();
+  const tel = document.getElementById('tel').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const niveau = document.getElementById('niveau').value;
+  let msg = "Bonjour AET,\n\nJe souhaite m'inscrire à la Formation IA & Prompting.\n\n";
+  msg += "Nom : " + nom + "\nTéléphone : " + tel + "\n";
+  if(email) msg += "Email : " + email + "\n";
+  msg += "Niveau souhaité : " + niveau + "\n\nMerci de me recontacter pour finaliser mon inscription.";
+  return msg;
+}
+function updateWaLink(){
+  try{
+    const msg = buildMessage();
+    waBtn.href = "https://wa.me/22899812072?text=" + encodeURIComponent(msg);
+  }catch(e){}
+}
+form.addEventListener('input', updateWaLink);
+updateWaLink();
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(!form.checkValidity()){ form.reportValidity(); return; }
+  const msg = buildMessage();
+  window.location.href = "mailto:albaneloh686@gmail.com?subject=" + encodeURIComponent("Inscription — Formation IA & Prompting AET") + "&body=" + encodeURIComponent(msg);
+  statusMsg.classList.add('show');
+});
+</script>
+</body>
+</html>
