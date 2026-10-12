@@ -1,0 +1,28 @@
+name: backup-key
+on: workflow_dispatch
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Chiffrer la cle
+        env:
+          KS: ${{ secrets.KEYSTORE_BASE64 }}
+          KSP: ${{ secrets.KEYSTORE_PASSWORD }}
+          KA: ${{ secrets.KEY_ALIAS }}
+          KP: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          mkdir -p out b
+          echo "$KS" | base64 -d > b/aet-release.jks
+          printf 'KEYSTORE_PASSWORD=%s\nKEY_ALIAS=%s\nKEY_PASSWORD=%s\n' "$KSP" "$KA" "$KP" > b/infos.txt
+          tar czf b.tgz b
+          openssl rand -hex 32 > k.txt
+          openssl enc -aes-256-cbc -pbkdf2 -salt -in b.tgz -out out/backup.tgz.enc -pass file:k.txt
+          openssl pkeyutl -encrypt -pubin -inkey .github/backup-pub.pem -pkeyopt rsa_padding_mode:oaep -in k.txt -out out/key.enc
+          rm -rf b b.tgz k.txt
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keystore-backup
+          path: out/
+          retention-days: 1
