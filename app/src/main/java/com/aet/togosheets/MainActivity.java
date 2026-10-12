@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 public class MainActivity extends Activity {
 
     private WebView webView;
-    private static final String URL = "https://alban3886.github.io/togosheets-pro/public.html";
+    private static final String URL = "https://market.aet-alban.online/";
 
     // API GitHub publique pour connaître la dernière version publiée (releases).
     private static final String UPDATE_CHECK_URL =
@@ -83,7 +83,17 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setLoadWithOverviewMode(true);
         s.setUseWideViewPort(true);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, android.webkit.WebResourceRequest request) {
+                return ouvrirLienExterne(request.getUrl());
+            }
+            @Override
+            @SuppressWarnings("deprecation")
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return ouvrirLienExterne(android.net.Uri.parse(url));
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl(URL);
 
@@ -317,5 +327,28 @@ public class MainActivity extends Activity {
                 launchApkInstall();
             }
         }
+    }
+
+    // Liens tel:, mailto:, WhatsApp... : ouverts avec l'appli du telephone.
+    // Les liens http/https restent dans l'appli.
+    private boolean ouvrirLienExterne(android.net.Uri uri) {
+        if (uri == null) return false;
+        String scheme = uri.getScheme() == null ? "" : uri.getScheme().toLowerCase();
+        String host = uri.getHost() == null ? "" : uri.getHost().toLowerCase();
+        boolean web = scheme.equals("http") || scheme.equals("https");
+        boolean whatsapp = host.equals("wa.me") || host.equals("api.whatsapp.com");
+        if (web && !whatsapp) return false;
+        try {
+            Intent i;
+            if (scheme.equals("intent")) {
+                i = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+            } else {
+                i = new Intent(Intent.ACTION_VIEW, uri);
+            }
+            startActivity(i);
+        } catch (Exception e) {
+            // Aucune appli ne peut ouvrir ce lien : on ne fait rien.
+        }
+        return true;
     }
 }
