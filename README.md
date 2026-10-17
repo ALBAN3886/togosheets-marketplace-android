@@ -4,7 +4,7 @@ App Android **coquille WebView** pour TogoSheets Marketplace — propulsé par A
 
 ⚠️ Ce dépôt ne contient **aucun code web** (plus d'`index.html` local depuis le
 nettoyage du 2026) : l'app charge directement en ligne
-`https://alban3886.github.io/togosheets-pro/public.html`. Le vrai code source
+`https://market.aet-alban.online/`. Le vrai code source
 vit uniquement dans le dépôt **togosheets-pro**, fichier `public.html`.
 
 ## 🚀 Comment générer l'APK
